@@ -538,18 +538,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setupVideoSource(senderId, videoSrc) {
-    // Reset video player & placeholder
     if (familyVideoPlayer) {
       familyVideoPlayer.pause();
-      familyVideoPlayer.classList.remove('active');
-    }
-    if (blackWindowPlaceholder) {
-      blackWindowPlaceholder.classList.remove('hidden');
     }
 
     // Mapping for video sources with fallbacks
     const videoSources = {
-      'mom': ['assets/videos/mom.mp4', 'assets/videos/meena.mp4', 'mom.mp4', 'meena.mp4'],
+      'mom': ['assets/videos/mom.mp4', 'mom.mp4', 'assets/videos/meena.mp4', 'meena.mp4'],
       'swayam': ['assets/videos/swayam.mp4', 'swayam.mp4'],
       'mama_mami': ['assets/videos/mama_mami.mp4', 'mama_mami.mp4'],
       'mayur': ['assets/videos/mayur.mp4', 'mayur.mp4'],
@@ -557,24 +552,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (videoSources[senderId]) {
+      // Immediately reveal video player and hide black placeholder
+      familyVideoPlayer.classList.add('active');
+      if (blackWindowPlaceholder) {
+        blackWindowPlaceholder.classList.add('hidden');
+      }
+
       const sources = videoSources[senderId];
       let sourceIdx = 0;
 
       function tryLoadSource(src) {
         familyVideoPlayer.src = src;
-        familyVideoPlayer.oncanplay = () => {
-          familyVideoPlayer.classList.add('active');
-          if (blackWindowPlaceholder) {
-            blackWindowPlaceholder.classList.add('hidden');
-          }
-          familyVideoPlayer.play().catch(() => {});
-        };
         familyVideoPlayer.onerror = () => {
           sourceIdx++;
           if (sourceIdx < sources.length) {
             tryLoadSource(sources[sourceIdx]);
           } else {
-            // All attempts failed -> black window placeholder
             familyVideoPlayer.classList.remove('active');
             if (blackWindowPlaceholder) {
               blackWindowPlaceholder.classList.remove('hidden');
@@ -582,11 +575,15 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         };
         familyVideoPlayer.load();
+        const p = familyVideoPlayer.play();
+        if (p !== undefined) {
+          p.catch(() => {});
+        }
       }
 
       tryLoadSource(sources[0]);
     } else {
-      // For Siddhi or Kaka Masi (videos not added yet) -> keep pure black window placeholder
+      // For Kaka Masi (video not added yet) -> keep pure black window placeholder
       familyVideoPlayer.removeAttribute('src');
       familyVideoPlayer.classList.remove('active');
       if (blackWindowPlaceholder) {
