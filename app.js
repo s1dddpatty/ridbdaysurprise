@@ -552,7 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'mom': ['assets/videos/mom.mp4', 'assets/videos/meena.mp4', 'mom.mp4', 'meena.mp4'],
       'swayam': ['assets/videos/swayam.mp4', 'swayam.mp4'],
       'mama_mami': ['assets/videos/mama_mami.mp4', 'mama_mami.mp4'],
-      'mayur': ['assets/videos/mayur.mp4', 'mayur.mp4']
+      'mayur': ['assets/videos/mayur.mp4', 'mayur.mp4'],
+      'siddhi': ['assets/videos/siddhi.mp4', 'siddhi.mp4']
     };
 
     if (videoSources[senderId]) {
