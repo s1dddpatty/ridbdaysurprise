@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday! 🎂 A Special Surprise</title>
+  <meta name="description" content="An interactive birthday celebration surprise with animated comic video, FPV candle blowing, and celebration finale.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;800;900&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Audio unlock & Stage 0: Black Screen with Starter -->
+  <div id="introCurtain" class="intro-curtain">
+    <div class="intro-content">
+      <div class="gift-box-icon">🎁</div>
+      <h1 class="intro-title">A Special Surprise Awaits...</h1>
+      <p class="intro-sub">Click anywhere to open</p>
+      <button id="startSurpriseBtn" class="primary-btn glow-pulse">Tap to Begin ✨</button>
+    </div>
+  </div>
+
+  <!-- Blinding White Transition Flash -->
+  <div id="whiteFlash" class="white-flash"></div>
+
+  <!-- STAGE 1: Fullscreen Comic Video Experience -->
+  <section id="stageVideo" class="stage stage-video hidden">
+    <!-- Fullscreen Video Element -->
+    <video id="birthdayVideo" playsinline preload="auto" class="fullscreen-video">
+      <source src="assets/comic_video.mp4" type="video/mp4">
+      <source src="comic_video.mp4" type="video/mp4">
+    </video>
+
+    <!-- Action Button (Appears only after video ends) -->
+    <div id="videoActionSection" class="video-action-overlay hidden">
+      <button id="cutCakeBtn" class="cake-action-btn glow-rainbow">
+        <span class="btn-icon">🎂</span>
+        <span class="btn-text">Blow Your Cake</span>
+        <span class="btn-sparkle">💨</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- STAGE 2: Soft Pinkish Glowy Room with Elegant Birthday Cake -->
+  <section id="stageRoom" class="stage stage-room hidden">
+    <!-- Soft Glowy Dreamy Background -->
+    <div class="soft-glow-bg">
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+      <div class="ambient-orb orb-3"></div>
+      <div class="sparkles-field" id="sparklesField"></div>
+    </div>
+
+    <!-- Soft Header Instruction -->
+    <header class="soft-header">
+      <h2 class="soft-title">Make a Wish & Blow the Candles ✨</h2>
+      <p class="soft-subtitle">Click each candle to blow it out (<span id="candlesLeftCount">7</span> remaining)</p>
+    </header>
+
+    <!-- Centerpiece: Aesthetic Birthday Cake -->
+    <div class="cake-scene-wrapper">
+      <div class="cake-shadow"></div>
+
+      <!-- Pedestal Stand -->
+      <div class="cake-pedestal">
+        <div class="pedestal-plate"></div>
+        <div class="pedestal-pillar"></div>
+        <div class="pedestal-base"></div>
+      </div>
+
+      <!-- Multi-tier Cake -->
+      <div class="aesthetic-cake">
+        <!-- Bottom Tier -->
+        <div class="cake-tier tier-bottom">
+          <div class="tier-frosting-drips drips-bottom"></div>
+        </div>
+
+        <!-- Top Tier -->
+        <div class="cake-tier tier-top">
+          <div class="top-surface">
+            <!-- Strawberry & Cream Decorations -->
+            <div class="cake-toppings">
+              <span class="berry b1">🍓</span>
+              <span class="berry b2">🍓</span>
+              <span class="berry b3">🍓</span>
+              <span class="berry b4">🍓</span>
+              <div class="rosette r1"></div>
+              <div class="rosette r2"></div>
+              <div class="rosette r3"></div>
+              <div class="rosette r4"></div>
+            </div>
+
+            <!-- 7 Birthday Candles -->
+            <div class="candles-row" id="candlesRow">
+              <!-- Injected by app.js (7 candles) -->
+            </div>
+          </div>
+          <div class="tier-frosting-drips drips-top"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Celebration Finale Card -->
+    <div id="celebrationOverlay" class="celebration-overlay hidden">
+      <div class="celebration-card animate-pop-in">
+        <div class="confetti-burst-icon">🎉</div>
+        <h1 class="celebration-title">HAPPY BIRTHDAY! 🎂</h1>
+        <p class="celebration-subtitle">May all your wishes and sweetest dreams come true! 💖</p>
+        
+        <!-- Requested Action Button -->
+        <div class="celebration-actions">
+          <button id="whatsNextBtn" class="whats-next-btn glow-pulse-pink">
+            <span>Wanna see what's next? 👉✨</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Physics Confetti & Balloons -->
+    <canvas id="effectsCanvas" class="effects-canvas"></canvas>
+    <div id="balloonContainer" class="balloon-container"></div>
+  </section>
+
+  <!-- STAGE 3: Family Surprise Envelopes Stage -->
+  <section id="stageEnvelopes" class="stage stage-envelopes hidden">
+    <!-- Soft Glowy Dreamy Background -->
+    <div class="soft-glow-bg">
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+      <div class="ambient-orb orb-3"></div>
+      <div class="sparkles-field" id="envelopesSparklesField"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="envelopes-header">
+      <h2 class="envelopes-title">Love Letters & Wishes for Riddhi 💌✨</h2>
+      <p class="envelopes-subtitle">Tap any envelope to open a special birthday message from family</p>
+    </header>
+
+    <!-- Envelopes Layout (3 on Left, 3 on Right) -->
+    <div class="envelopes-layout">
+      <!-- Left Column: Mom, Swayam, Mama Mami -->
+      <div class="envelopes-column column-left">
+        <!-- Envelope 1: Mom -->
+        <div class="envelope-item" data-id="mom" data-name="Mom" data-video="assets/videos/mom.mp4">
+          <div class="envelope-card">
+            <div class="envelope-flap"></div>
+            <div class="envelope-pocket"></div>
+            <div class="envelope-seal">
+              <span class="heart-icon">❤️</span>
+            </div>
+            <div class="envelope-label">
+              <span class="label-from">To Riddhi With Love</span>
+              <span class="label-name">Mom 🌸</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Envelope 2: Swayam -->
+        <div class="envelope-item" data-id="swayam" data-name="Swayam" data-video="assets/videos/swayam.mp4">
+          <div class="envelope-card">
+            <div class="envelope-flap"></div>
+            <div class="envelope-pocket"></div>
+            <div class="envelope-seal">
+              <span class="heart-icon">❤️</span>
+            </div>
+            <div class="envelope-label">
+              <span class="label-from">To Di With Love</span>
+              <span class="label-name">Swayam 🌟</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Envelope 3: Mama Mami -->
+        <div class="envelope-item" data-id="mama_mami" data-name="Mama Mami" data-video="assets/videos/mama_mami.mp4">
+          <div class="envelope-card">
+            <div class="envelope-flap"></div>
+            <div class="envelope-pocket"></div>
+            <div class="envelope-seal">
+              <span class="heart-icon">❤️</span>
+            </div>
+            <div class="envelope-label">
+              <span class="label-from">Blessings & Love</span>
+              <span class="label-name">Mama Mami 💖</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Atmosphere (Floating decorative elements) -->
+      <div class="center-stage-decor">
+        <div class="floating-cake-mini">🎂</div>
+        <p class="tap-hint-text">Choose an envelope to open ✨</p>
+      </div>
+
+      <!-- Right Column: Mayur, Siddhi, Kaka Masi -->
+      <div class="envelopes-column column-right">
+        <!-- Envelope 4: Mayur -->
+        <div class="envelope-item" data-id="mayur" data-name="Mayur" data-video="assets/videos/mayur.mp4">
+          <div class="envelope-card">
+            <div class="envelope-flap"></div>
+            <div class="envelope-pocket"></div>
+            <div class="envelope-seal">
+              <span class="heart-icon">❤️</span>
+            </div>
+            <div class="envelope-label">
+              <span class="label-from">Birthday Cheer</span>
+              <span class="label-name">Mayur 🎉</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Envelope 5: Siddhi -->
+        <div class="envelope-item" data-id="siddhi" data-name="Siddhi" data-video="assets/videos/siddhi.mp4">
+          <div class="envelope-card">
+            <div class="envelope-flap"></div>
+            <div class="envelope-pocket"></div>
+            <div class="envelope-seal">
+              <span class="heart-icon">❤️</span>
+            </div>
+            <div class="envelope-label">
+              <span class="label-from">Lots of Love</span>
+              <span class="label-name">Siddhi 💕</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Envelope 6: Kaka Masi -->
+        <div class="envelope-item" data-id="kaka_masi" data-name="Kaka Masi" data-video="assets/videos/kaka_masi.mp4">
+          <div class="envelope-card">
+            <div class="envelope-flap"></div>
+            <div class="envelope-pocket"></div>
+            <div class="envelope-seal">
+              <span class="heart-icon">❤️</span>
+            </div>
+            <div class="envelope-label">
+              <span class="label-from">Warmest Blessings</span>
+              <span class="label-name">Kaka Masi 💐</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Envelope Opening & Video Modal -->
+    <div id="envelopeVideoModal" class="envelope-video-modal hidden">
+      <div class="modal-backdrop" id="modalBackdrop"></div>
+      <div class="envelope-modal-card">
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close message">✕</button>
+        
+        <!-- Envelope Open Animation Header -->
+        <div class="modal-envelope-header">
+          <div class="modal-stamp">💌</div>
+          <div class="modal-header-info">
+            <span class="modal-tagline">Birthday Message From</span>
+            <h3 class="modal-sender-title" id="modalSenderTitle">Mom</h3>
+          </div>
+          <div class="modal-seal-badge">
+            <span class="modal-heart">❤️</span>
+          </div>
+        </div>
+
+        <!-- The Video Window (Black Placeholder Window) -->
+        <div class="video-window-box">
+          <video id="familyVideoPlayer" playsinline controls class="family-video-element">
+            <!-- Source will be set on envelope click -->
+          </video>
+          <div class="black-window-placeholder" id="blackWindowPlaceholder">
+            <div class="black-window-content">
+              <div class="cam-indicator">
+                <span class="cam-recording-dot"></span>
+                <span class="cam-label">VIDEO MESSAGE</span>
+              </div>
+              <div class="placeholder-play-icon">▶</div>
+              <p class="placeholder-main-text">Happy Birthday Riddhi!</p>
+              <p class="placeholder-author-text" id="placeholderAuthorText">Video from Mom</p>
+              <span class="placeholder-file-badge" id="placeholderFileBadge">assets/videos/mom.mp4</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-bottom-actions">
+          <button id="modalReturnBtn" class="modal-return-btn">
+            <span>← Back to Envelopes</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
